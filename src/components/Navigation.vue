@@ -1,6 +1,6 @@
 <template>
   <header class="flex">
-    <div class="banding flex">
+    <div class="branding flex">
       <img src="../assets/file-invoice-dollar-solid.png" />
     </div>
   </header>
@@ -11,7 +11,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 header {
   z-index: 99;
   flex-direction: row;
@@ -20,20 +20,22 @@ header {
     min-height: 100%;
     min-width: 90px;
     flex-direction: column;
-    border-radious: 0 20px 20px 0;
+    border-radius: 0 20px 20px 0;
   }
-}
-.branding {
-  border-radius: 0 20px 20px 0;
-  background-color: #7e5dfa;
-  justify-content: center;
-  padding: 24px;
-  @media (min-width: 900px) {
-    width: 100%;
+
+  .branding {
+    border-radius: 0 20px 20px 0;
+    background-color: #7c5dfa;
+    justify-content: center;
+    padding: 24px;
+    @media (min-width: 900px) {
+      width: 100%;
+    }
+
+    img {
+      width: auto;
+      height: 30px;
+    }
   }
-}
-img {
-  width: auto;
-  height: 30px;
 }
 </style>
