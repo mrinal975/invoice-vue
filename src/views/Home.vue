@@ -27,7 +27,7 @@
       </div>
     </div>
     <!-- Invoices -->
-    <div>
+    <div v-if="invoiceData.length > 0">
       <Invoice
         v-for="(invoice, index) in invoiceData"
         :invoice="invoice"
