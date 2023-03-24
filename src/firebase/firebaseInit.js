@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
+import firebase from "firebase/app";
 import "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyB3DNEC2DuY7r-3VDP5ja11rZwhUGvm9Mc",
   authDomain: "invoice-app-41688.firebaseapp.com",
@@ -8,6 +9,6 @@ const firebaseConfig = {
   messagingSenderId: "609754410894",
   appId: "1:609754410894:web:97e6a528fe4d5e7e353edf",
 };
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export default firebaseApp.firestore();

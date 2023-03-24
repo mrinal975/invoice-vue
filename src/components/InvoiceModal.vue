@@ -40,7 +40,7 @@
               required
               type="text"
               id="billerCountry"
-              v-model="billerZipCode"
+              v-model="billerCountry"
             />
           </div>
         </div>
@@ -173,10 +173,13 @@
           <button @click="closeInvoice" class="red">Cancel</button>
         </div>
         <div class="right flex">
-          <button @click="saveDraft" class="dark-purple">Save Draft</button>
-          <button @click="publishInvoice" class="dark-purple">
+          <button type="sumbit" @click="saveDraft" class="dark-purple">
+            Save Draft
+          </button>
+          <button type="sumbit" @click="publishInvoice" class="dark-purple">
             Create Invoice
           </button>
+          <button type="sumbit" class="purple">Update Invoice</button>
         </div>
       </div>
     </form>
@@ -185,6 +188,7 @@
 <script>
 import { mapMutations } from "vuex";
 import { v4 as uuidv4 } from "uuid";
+import db from "../firebase/firebaseInit";
 export default {
   name: "InvoiceModal",
   data() {
@@ -223,7 +227,41 @@ export default {
   methods: {
     ...mapMutations(["TOGGLE_INVOICE"]),
     checkClick() {},
-    submitForm() {},
+    async uploadInvoice() {
+      if (this.invoiceItemList.length < 1) {
+        alert("please ensure you filled out work items!");
+        return;
+      }
+      this.calInvoiceTotal();
+      const dataBase = db.collection("invoices").doc();
+      await dataBase.set({
+        id: uuidv4(),
+        billerStreetAddress: this.billerStreetAddress,
+        billerCity: this.billerCity,
+        billerZipCode: this.billerZipCode,
+        billerCountry: this.billerCountry,
+        clientName: this.clientName,
+        clientEmail: this.clientEmail,
+        clientStreetAddress: this.clientStreetAddress,
+        clientCity: this.clientCity,
+        clientZipCode: this.clientZipCode,
+        clientCountry: this.clientCountry,
+        invoiceDateUnix: this.invoiceDateUnix,
+        invoiceDate: this.invoiceDate,
+        paymentTerms: this.paymentTerms,
+        paymentDueDateUnix: this.paymentDueDateUnix,
+        paymentDueDate: this.paymentDueDate,
+        productDescription: this.productDescription,
+        invoicePending: this.invoicePending,
+        invoiceDraft: this.invoiceDraft,
+        invoiceItemList: this.invoiceItemList,
+        invoiceTotal: this.invoiceTotal,
+      });
+      this.TOGGLE_INVOICE();
+    },
+    submitForm() {
+      this.uploadInvoice();
+    },
     deleteInvoiceItem(id) {
       this.invoiceItemList = this.invoiceItemList.filter(
         (item) => item.id != id
@@ -242,8 +280,18 @@ export default {
     closeInvoice() {
       this.TOGGLE_INVOICE();
     },
-    saveDraft() {},
-    publishInvoice() {},
+    saveDraft() {
+      this.invoiceDraft = true;
+    },
+    publishInvoice() {
+      this.invoicePending = true;
+    },
+    calInvoiceTotal() {
+      this.invoiceTotal = 0;
+      this.invoiceItemList.forEach((item) => {
+        this.invoiceTotal += item.total;
+      });
+    },
   },
   watch: {
     paymentTerms() {
