@@ -200,16 +200,16 @@
 </template>
 <script>
 import Loading from "./Loading.vue";
-import { mapMutations } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { v4 as uuidv4 } from "uuid";
 import db from "../firebase/firebaseInit";
-import { mapState } from "vuex";
 export default {
   name: "InvoiceModal",
   components: { Loading },
   data() {
     return {
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
+      docId: null,
       billerStreetAddress: null,
       billerCity: null,
       billerZipCode: null,
@@ -270,6 +270,7 @@ export default {
   },
   methods: {
     ...mapMutations(["TOGGLE_INVOICE", "TOGGLE_MODAL", "TOGGLE_EDIT_INVOICE"]),
+    ...mapActions(["UPDATE_INVOICE"]),
     checkClick(e) {
       if (e.target === this.$refs.invoiceWrap) {
         this.TOGGLE_MODAL();
@@ -309,7 +310,46 @@ export default {
       this.TOGGLE_INVOICE();
       this.loading = false;
     },
+    async updateInvoice() {
+      if (this.invoiceItemList.length < 1) {
+        alert("please ensure you filled out work items!");
+        return;
+      }
+      this.loading = true;
+      this.calInvoiceTotal();
+      const dataBase = db.collection("invoices").doc(this.docId);
+      await dataBase.update({
+        invoiceId: this.docId,
+        billerStreetAddress: this.billerStreetAddress,
+        billerCity: this.billerCity,
+        billerZipCode: this.billerZipCode,
+        billerCountry: this.billerCountry,
+        clientName: this.clientName,
+        clientEmail: this.clientEmail,
+        clientStreetAddress: this.clientStreetAddress,
+        clientCity: this.clientCity,
+        clientZipCode: this.clientZipCode,
+        clientCountry: this.clientCountry,
+        invoiceDateUnix: this.invoiceDateUnix,
+        invoiceDate: this.invoiceDate,
+        paymentTerms: this.paymentTerms,
+        paymentDueDateUnix: this.paymentDueDateUnix,
+        paymentDueDate: this.paymentDueDate,
+        productDescription: this.productDescription,
+        invoiceTotal: this.invoiceTotal,
+      });
+      const data = {
+        docId: this.docId,
+        routeId: this.$route.params.invoiceId,
+      };
+      this.UPDATE_INVOICE(data);
+      this.loading = false;
+    },
     submitForm() {
+      if (this.editInvoice) {
+        this.updateInvoice();
+        return;
+      }
       this.uploadInvoice();
     },
     deleteInvoiceItem(id) {
