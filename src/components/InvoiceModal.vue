@@ -6,8 +6,8 @@
   >
     <form @submit.prevent="submitForm" class="invoice-content">
       <Loading v-show="loading" />
-      <h1>New Invoice</h1>
-
+      <h1 v-if="!editInvoice">New Invoice</h1>
+      <h1 v-if="editInvoice">Update Invoice</h1>
       <!-- Bill From -->
 
       <div class="bill-from flex flex-column">
@@ -174,13 +174,25 @@
           <button @click="closeInvoice" class="red">Cancel</button>
         </div>
         <div class="right flex">
-          <button type="sumbit" @click="saveDraft" class="dark-purple">
+          <button
+            v-if="!editInvoice"
+            type="sumbit"
+            @click="saveDraft"
+            class="dark-purple"
+          >
             Save Draft
           </button>
-          <button type="sumbit" @click="publishInvoice" class="dark-purple">
+          <button
+            type="sumbit"
+            v-if="!editInvoice"
+            @click="publishInvoice"
+            class="dark-purple"
+          >
             Create Invoice
           </button>
-          <button type="sumbit" class="purple">Update Invoice</button>
+          <button v-if="editInvoice" type="sumbit" class="purple">
+            Update Invoice
+          </button>
         </div>
       </div>
     </form>
@@ -191,6 +203,7 @@ import Loading from "./Loading.vue";
 import { mapMutations } from "vuex";
 import { v4 as uuidv4 } from "uuid";
 import db from "../firebase/firebaseInit";
+import { mapState } from "vuex";
 export default {
   name: "InvoiceModal",
   components: { Loading },
@@ -313,6 +326,9 @@ export default {
         this.paymentDueDateUnix
       ).toLocaleDateString("en-us", this.dateOptions);
     },
+  },
+  computed: {
+    ...mapState(["editInvoice"]),
   },
 };
 </script>

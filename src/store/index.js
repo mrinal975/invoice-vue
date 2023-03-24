@@ -8,7 +8,7 @@ export default createStore({
     modalActive: null,
     invoicesLoaded: null,
     currentInvoiceArray: null,
-    editInvoice: null,
+    editInvoice: false,
   },
   getters: {},
   mutations: {
@@ -30,7 +30,7 @@ export default createStore({
       });
     },
     TOGGLE_EDIT_INVOICE(state) {
-      state.editInvoice != state.editInvoice;
+      state.editInvoice = !state.editInvoice;
     },
   },
   actions: {
