@@ -11,7 +11,7 @@
         <div @click="toggleFilterMenu" class="filter flex" ref="filter">
           <span>Filter By status</span>
           <img src="../assets/icon-arrow-down.svg" alt="" />
-          <ul v-show="filterMenu" class="filter-menu">
+          <ul v-if="filterMenu" class="filter-menu">
             <li>Draft</li>
             <li>Pending</li>
             <li>Paid</li>
@@ -26,15 +26,22 @@
         </div>
       </div>
     </div>
+    <div>
+      <Invoice
+        v-for="(invoice, index) in invoiceData"
+        :invoice="invoice"
+        :key="index"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
+import { mapMutations, mapState } from "vuex";
+import Invoice from "../components/Invoice.vue";
 export default {
   name: "HomeView",
-  component: {},
+  components: { Invoice },
   data() {
     return {
       mobile: null,
@@ -46,6 +53,9 @@ export default {
     newInvoice() {
       this.TOGGLE_INVOICE();
     },
+  },
+  computed: {
+    ...mapState(["invoiceData"]),
   },
 };
 </script>
