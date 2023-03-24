@@ -138,7 +138,7 @@
             </tr>
             <tr
               class="table-items flex"
-              v-for="{ item, index } in invoiceItemList"
+              v-for="(item, index) in invoiceItemList"
               :key="index"
             >
               <td class="item-name">
@@ -224,8 +224,21 @@ export default {
     ...mapMutations(["TOGGLE_INVOICE"]),
     checkClick() {},
     submitForm() {},
-    deleteInvoiceItem(id) {},
-    addNewInvoiceItem() {},
+    deleteInvoiceItem(id) {
+      this.invoiceItemList = this.invoiceItemList.filter(
+        (item) => item.id != id
+      );
+    },
+    addNewInvoiceItem() {
+      const data = {
+        id: uuidv4(),
+        itemName: "",
+        qty: "",
+        price: 0,
+        total: 0,
+      };
+      this.invoiceItemList.push(data);
+    },
     closeInvoice() {
       this.TOGGLE_INVOICE();
     },
