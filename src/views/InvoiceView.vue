@@ -47,7 +47,7 @@
     <!-- Invoice Details -->
     <div class="invoice-details flex flex-column">
       <div class="top flex">
-        <div class="left flex flex-column">
+        <div class="left flex">
           <p><span>#</span> {{ currentInvoice.invoiceId }}</p>
           <p>{{ currentInvoice.productDescription }}</p>
         </div>
@@ -121,11 +121,18 @@ export default {
     this.currentInvoice = this.currentInvoiceArray[0];
   },
   methods: {
-    ...mapMutations(["SET_CURRENT_INVOICE"]),
+    ...mapMutations([
+      "SET_CURRENT_INVOICE",
+      "TOGGLE_INVOICE",
+      "TOGGLE_EDIT_INVOICE",
+    ]),
     getCurrentInvocie() {
       this.SET_CURRENT_INVOICE(this.$route.params.invoiceId);
     },
-    toggleEditInvoice() {},
+    toggleEditInvoice() {
+      this.TOGGLE_EDIT_INVOICE();
+      this.TOGGLE_INVOICE();
+    },
   },
   computed: {
     ...mapState(["currentInvoiceArray"]),
