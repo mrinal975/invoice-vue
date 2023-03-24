@@ -229,8 +229,12 @@ export default {
     );
   },
   methods: {
-    ...mapMutations(["TOGGLE_INVOICE"]),
-    checkClick() {},
+    ...mapMutations(["TOGGLE_INVOICE", "TOGGLE_MODAL"]),
+    checkClick(e) {
+      if (e.target === this.$refs.invoiceWrap) {
+        this.TOGGLE_MODAL();
+      }
+    },
     async uploadInvoice() {
       if (this.invoiceItemList.length < 1) {
         alert("please ensure you filled out work items!");
