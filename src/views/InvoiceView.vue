@@ -58,6 +58,52 @@
           <p>{{ currentInvoice.billerCountry }}</p>
         </div>
       </div>
+      <div class="middle flex">
+        <div class="payment flex flex-column">
+          <h4>Invoice Date</h4>
+          <p>
+            {{ currentInvoice.invoiceDate }}
+          </p>
+          <h4>Payment Date</h4>
+          <p>{{ currentInvoice.paymentDueDate }}</p>
+        </div>
+        <div class="bill flex flex-column">
+          <h4>Bill To</h4>
+          <p>{{ currentInvoice.clientName }}</p>
+          <p>{{ currentInvoice.clientStreetAddress }}</p>
+          <p>{{ currentInvoice.clientCity }}</p>
+          <p>{{ currentInvoice.clientZipCode }}</p>
+          <p>{{ currentInvoice.clientCountry }}</p>
+        </div>
+        <div class="send-to flex flex-column">
+          <h4>Send To</h4>
+          <p>{{ currentInvoice.clientEmail }}</p>
+        </div>
+      </div>
+      <div class="bottom flex flex-column">
+        <div class="billing-items">
+          <div class="heading flex">
+            <p>Item Name</p>
+            <p>QTY</p>
+            <p>Price</p>
+            <p>Total</p>
+          </div>
+          <div
+            v-for="(item, index) in currentInvoice.invoiceItemList"
+            :key="index"
+            class="item flex"
+          >
+            <p>{{ item.itemName }}</p>
+            <p>{{ item.qty }}</p>
+            <p>{{ item.price }}</p>
+            <p>{{ item.total }}</p>
+          </div>
+        </div>
+        <div class="total flex">
+          <p>Amount Due</p>
+          <p>{{ currentInvoice.invoiceTotal }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
