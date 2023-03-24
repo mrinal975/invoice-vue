@@ -244,7 +244,7 @@ export default {
       this.calInvoiceTotal();
       const dataBase = db.collection("invoices").doc();
       await dataBase.set({
-        id: uuidv4(),
+        invoiceId: uuidv4(),
         billerStreetAddress: this.billerStreetAddress,
         billerCity: this.billerCity,
         billerZipCode: this.billerZipCode,

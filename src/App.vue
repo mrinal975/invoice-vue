@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div v-if="!mobile" class="app flex flex-clumn">
-      <Navigation />
-      <div class="app-content flex flex-column">
-        <Modal v-show="modalActive" />
-        <transition name="invoice">
-          <InvoiceModal v-if="invoiceModal" />
-        </transition>
+    <div v-if="!mobile">
+      <div class="app flex flex-clumn" v-show="invoicesLoaded">
+        <Navigation />
+        <div class="app-content flex flex-column">
+          <Modal v-show="modalActive" />
+          <transition name="invoice">
+            <InvoiceModal v-if="invoiceModal" />
+          </transition>
 
-        <router-view />
+          <router-view />
+        </div>
       </div>
+      <Loading v-show="!invoicesLoaded" />
     </div>
     <div v-else class="mobile-message flex">
       <h2>Sorry, this app is not suppored on mobile Device</h2>
@@ -21,21 +24,24 @@
 <script>
 import Navigation from "./components/Navigation.vue";
 import InvoiceModal from "./components/InvoiceModal.vue";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import Modal from "./components/modal.vue";
+import Loading from "./components/Loading.vue";
 export default {
   name: "App",
-  components: { Navigation, InvoiceModal, Modal },
+  components: { Navigation, InvoiceModal, Modal, Loading },
   data() {
     return {
       mobile: null,
     };
   },
   created() {
+    this.GET_INVOICE();
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
   },
   methods: {
+    ...mapActions(["GET_INVOICE"]),
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -46,7 +52,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["invoiceModal", "modalActive"]),
+    ...mapState(["invoiceModal", "modalActive", "invoicesLoaded"]),
   },
 };
 </script>
