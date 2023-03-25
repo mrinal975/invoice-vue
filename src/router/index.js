@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/Home.vue";
 import InvoiceView from "../views/InvoiceView.vue";
+import FileUpload from "../views/FileUpload.vue";
 const routes = [
   {
     path: "/",
     name: "Home",
     component: HomeView,
+  },
+  {
+    path: "/file-upload",
+    name: "FileUpload",
+    component: FileUpload,
   },
   {
     path: "/invoice/:invoiceId",
